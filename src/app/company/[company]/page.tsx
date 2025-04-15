@@ -2,6 +2,8 @@ import { fmpBalance, fmpIncome } from "../../apiFunctions/financeFunctions";
 import { getFiveYearFinancials } from "../../apiFunctions/financeFunctions";
 import { getFiveYearMetrics } from "../../apiFunctions/financeFunctions";
 
+import CompanyCard from '../../components/ CompanyCard';
+
 const testData = [
     {
       fiscalYear: '2024',
@@ -91,6 +93,8 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
                     <p>Net Income: {data.netIncome}</p>
                 </div>
             ))}
+            <CompanyCard />
+            
             <div>
             {fiveYearMetrics.map((data) => (
                 <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">

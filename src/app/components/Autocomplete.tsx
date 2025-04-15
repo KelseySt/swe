@@ -32,7 +32,8 @@ const Autocomplete = () => {
 
     // Filter the results based on the search term
     const filteredResults : string[] = abreviations.filter((result) =>
-      result.toLowerCase().includes(term.toLowerCase())
+      // result.toLowerCase().includes(term.toLowerCase())
+      result.toLowerCase().startsWith(term.toLowerCase())
     );
 
     setResults(filteredResults);
