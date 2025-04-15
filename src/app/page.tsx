@@ -1,16 +1,14 @@
 
-import { callFMP } from "./apiFunctions/financeFunctions";
+import { fmpBalance, fmpIncome } from "./apiFunctions/financeFunctions";
 import Autocomplete from "./components/Autocomplete";
+import { usePathname } from "next/navigation";
 
-export default function Home({searchParams,}:{searchParams?:{
-  query?: string;
-  page?: string;
-}}) {
+export default function CompanyPage() {
   
   const handleClick = async(data : FormData) => {
     "use server";
-    const company = data.get('firstName') as string
-    callFMP(company);
+    const company = data.get('company') as string
+    
   };
 
   return (
