@@ -1,6 +1,6 @@
 
 export interface FiscalYearData {
-	fiscalYear: string; // e.g. 2023
+	fiscalYear: string;
 	totalCurrentAssets: number;
 	totalCurrentLiabilities: number;
 	inventory: number;
@@ -13,6 +13,8 @@ export interface FiscalYearData {
 
 var companyBalanceData;
 var companyIncomeData;
+
+var FiveYearFinancials : FiscalYearData[] = [];
 
 export const fmpBalance = async (company: string) => {
     
@@ -39,3 +41,27 @@ export const fmpIncome = async (company: string) => {
 	}
 };
 
+
+export async function getFiveYearFinancials(companyBalanceData: any, companyIncomeData: any) {
+    try{
+        for(var i = 0; i < 5; i++) {
+            const fiscalYearData: FiscalYearData = {
+                fiscalYear: companyBalanceData[i].fiscalYear,
+                totalCurrentAssets: companyBalanceData[i].totalCurrentAssets,
+                totalCurrentLiabilities: companyBalanceData[i].totalCurrentLiabilities,
+                inventory: companyBalanceData[i].inventory,
+                prepaids: companyBalanceData[i].prepaids,
+                totalStockholdersEquity: companyBalanceData[i].totalStockholdersEquity,
+                revenue: companyIncomeData[i].revenue,
+                ebit: companyIncomeData[i].ebit,
+                netIncome: companyIncomeData[i].netIncome
+            };
+            FiveYearFinancials[i] = fiscalYearData;
+        }
+        console.log(FiveYearFinancials);
+        return FiveYearFinancials;
+    } catch (err) {
+        console.log(err);
+        return FiveYearFinancials;
+    }
+}
