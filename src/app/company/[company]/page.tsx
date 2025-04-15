@@ -1,5 +1,6 @@
 import { FiscalYearData } from "../../apiFunctions/financeFunctions";
 import { fmpBalance, fmpIncome } from "../../apiFunctions/financeFunctions";
+import CompanyCard from "../../components/ CompanyCard";
 
 var FiveYearFinancials : FiscalYearData[] = [];
 
@@ -115,6 +116,8 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
                     <p>Net Income: {data.netIncome}</p>
                 </div>
             ))}
+            <CompanyCard />
+            
         </div>
     );
 }  
