@@ -1,32 +1,8 @@
-import { FiscalYearData } from "../../apiFunctions/financeFunctions";
 import { fmpBalance, fmpIncome } from "../../apiFunctions/financeFunctions";
-import CompanyCard from "../../components/ CompanyCard";
+import { getFiveYearFinancials } from "../../apiFunctions/financeFunctions";
+import { getFiveYearMetrics } from "../../apiFunctions/financeFunctions";
 
-var FiveYearFinancials : FiscalYearData[] = [];
-
-async function getFiveYearFinancials(companyBalanceData: any, companyIncomeData: any) {
-    try{
-        for(var i = 0; i < 5; i++) {
-            const fiscalYearData: FiscalYearData = {
-                fiscalYear: companyBalanceData[i].fiscalYear,
-                totalCurrentAssets: companyBalanceData[i].totalCurrentAssets,
-                totalCurrentLiabilities: companyBalanceData[i].totalCurrentLiabilities,
-                inventory: companyBalanceData[i].inventory,
-                prepaids: companyBalanceData[i].prepaids,
-                totalStockholdersEquity: companyBalanceData[i].totalStockholdersEquity,
-                revenue: companyIncomeData[i].revenue,
-                ebit: companyIncomeData[i].ebit,
-                netIncome: companyIncomeData[i].netIncome
-            };
-            FiveYearFinancials[i] = fiscalYearData;
-        }
-        console.log(FiveYearFinancials);
-        return FiveYearFinancials;
-    } catch (err) {
-        console.log(err);
-        return FiveYearFinancials;
-    }
-}
+import CompanyCard from '../../components/ CompanyCard';
 
 const testData = [
     {
@@ -95,9 +71,10 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
 
     //const companyBalanceData = await fmpBalance(company);
     //const companyIncomeData = await fmpIncome(company);
-    //const fiveYearFinancials = await getFiveYearFinancials(companyBalanceData, companyIncomeData);
+    //var fiveYearFinancials = await getFiveYearFinancials(companyBalanceData, companyIncomeData);
 
     const fiveYearFinancials = testData; 
+    const fiveYearMetrics = await getFiveYearMetrics(fiveYearFinancials);
     // This component just lists all of the available data currently, we'll be making big changes
     // to make an effective company page display
     return (
@@ -118,6 +95,18 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
             ))}
             <CompanyCard />
             
+            <div>
+            {fiveYearMetrics.map((data) => (
+                <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">
+                    <p>company: {company}</p>
+                    <p>Current Ratio: {data.currentRatio}</p>
+                    <p>Quick Ratio: {data.quickRatio}</p>
+                    <p>Debt to Equity (D/E): {data.debtToEquity}</p>
+                    <p>Operating Margin: {data.operatingMargin}</p>
+                    <p>Net Margin!!!!: {data.netMargin}</p>
+                </div>
+            ))}
+            </div>
         </div>
     );
 }  

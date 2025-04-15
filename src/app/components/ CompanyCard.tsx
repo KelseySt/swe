@@ -2,7 +2,7 @@ import {Card, CardHeader, CardBody, CardFooter, Divider, Link, Image} from "@her
 
 
 
-export default function App() {
+export default function CompanyCard() {
   return (
     <Card className="max-w-[400px] shadow-lg bg-sky-100">
       <CardHeader className="flex gap-3">
