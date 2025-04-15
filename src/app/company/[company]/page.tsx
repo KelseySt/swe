@@ -1,5 +1,6 @@
 import { fmpBalance, fmpIncome } from "../../apiFunctions/financeFunctions";
 import { getFiveYearFinancials } from "../../apiFunctions/financeFunctions";
+import { getFiveYearMetrics } from "../../apiFunctions/financeFunctions";
 
 const testData = [
     {
@@ -71,6 +72,7 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
     //var fiveYearFinancials = await getFiveYearFinancials(companyBalanceData, companyIncomeData);
 
     const fiveYearFinancials = testData; 
+    const fiveYearMetrics = await getFiveYearMetrics(fiveYearFinancials);
     // This component just lists all of the available data currently, we'll be making big changes
     // to make an effective company page display
     return (
@@ -89,6 +91,18 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
                     <p>Net Income: {data.netIncome}</p>
                 </div>
             ))}
+            <div>
+            {fiveYearMetrics.map((data) => (
+                <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">
+                    <p>company: {company}</p>
+                    <p>Current Ratio: {data.currentRatio}</p>
+                    <p>Quick Ratio: {data.quickRatio}</p>
+                    <p>Debt to Equity (D/E): {data.debtToEquity}</p>
+                    <p>Operating Margin: {data.operatingMargin}</p>
+                    <p>Net Margin!!!!: {data.netMargin}</p>
+                </div>
+            ))}
+            </div>
         </div>
     );
 }  
