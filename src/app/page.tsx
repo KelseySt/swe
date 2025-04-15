@@ -9,7 +9,7 @@ export default function Home({searchParams,}:{searchParams?:{
   
   const handleClick = async(data : FormData) => {
     "use server";
-    const company = data.get("company");
+    const company = data.get('firstName') as string
     callFMP(company);
   };
 

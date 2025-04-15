@@ -18,7 +18,7 @@ const abreviations = [
 
 const Autocomplete = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<string[]>([]);
 
   const handleInputChange = (event : any) => {
     const { value } = event.target;
