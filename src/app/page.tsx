@@ -1,7 +1,5 @@
 
 import { callFMP } from "./apiFunctions/financeFunctions";
-import Search from "./components/Search";
-import Companies from "./components/Companies";
 import Autocomplete from "./components/Autocomplete";
 
 export default function Home({searchParams,}:{searchParams?:{
@@ -9,8 +7,6 @@ export default function Home({searchParams,}:{searchParams?:{
   page?: string;
 }}) {
   
-  const query = searchParams?.query || '';
-  const currentPage = Number(searchParams?.page) || 1;
   const handleClick = async(data : FormData) => {
     "use server";
     const company = data.get("company");
