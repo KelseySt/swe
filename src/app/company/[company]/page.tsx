@@ -1,8 +1,10 @@
+
 import { fmpBalance, fmpIncome } from "../../apiFunctions/financeFunctions";
 import { getFiveYearFinancials } from "../../apiFunctions/financeFunctions";
 import { getFiveYearMetrics } from "../../apiFunctions/financeFunctions";
 
-import CompanyCard from '../../components/ CompanyCard';
+import CompanyClientPage from '../../components/CompanyClientPage';
+
 
 const testData = [
     {
@@ -65,6 +67,7 @@ const testData = [
 export default async function CompanyPage({params, }: { params: Promise<{ company: string }>}) {
     const { company } = await params;
     console.log(company);
+    
 
     /* For the sake of saving api calls, do not uncomment 
      these, and use the testData for UI testing instead :) */
@@ -75,38 +78,76 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
 
     const fiveYearFinancials = testData; 
     const fiveYearMetrics = await getFiveYearMetrics(fiveYearFinancials);
+    
     // This component just lists all of the available data currently, we'll be making big changes
-    // to make an effective company page display
+    // // to make an effective company page display
     return (
-        <div>
-            {fiveYearFinancials.map((data) => (
-                <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">
-                    <p>company: {company}</p>
-                    <p>Fiscal Year: {data.fiscalYear}</p>
-                    <p>Total Current Assets: {data.totalCurrentAssets}</p>
-                    <p>Total Current Liabilities: {data.totalCurrentLiabilities}</p>
-                    <p>Inventory: {data.inventory}</p>
-                    <p>Prepaids: {data.prepaids}</p>
-                    <p>Total Stockholders Equity: {data.totalStockholdersEquity}</p>
-                    <p>Revenue: {data.revenue}</p>
-                    <p>EBIT: {data.ebit}</p>
-                    <p>Net Income: {data.netIncome}</p>
-                </div>
-            ))}
-            <CompanyCard />
-            
-            <div>
-            {fiveYearMetrics.map((data) => (
-                <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">
-                    <p>company: {company}</p>
-                    <p>Current Ratio: {data.currentRatio}</p>
-                    <p>Quick Ratio: {data.quickRatio}</p>
-                    <p>Debt to Equity (D/E): {data.debtToEquity}</p>
-                    <p>Operating Margin: {data.operatingMargin}</p>
-                    <p>Net Margin!!!!: {data.netMargin}</p>
-                </div>
-            ))}
-            </div>
+      <div className="flex flex-col h-screen">
+        <h1 className="text-5xl font-bold text-center mt-4 mb-20">{company} Stats</h1>
+        <div className="flex-1">
+          <CompanyClientPage company={company} metrics={fiveYearMetrics} />
         </div>
+      </div>
     );
+    
+  
+
+   
+    
+    // return (
+      
+    //     <div>
+    //         {fiveYearFinancials.map((data) => (
+    //             <div key={data.fiscalYear} className="m-6 p-5 bg-purple-300 rounded-md">
+    //                 <p>company: {company}</p>
+    //                 <p>Fiscal Year: {data.fiscalYear}</p>
+    //                 <p>Total Current Assets: {data.totalCurrentAssets}</p>
+    //                 <p>Total Current Liabilities: {data.totalCurrentLiabilities}</p>
+    //                 <p>Inventory: {data.inventory}</p>
+    //                 <p>Prepaids: {data.prepaids}</p>
+    //                 <p>Total Stockholders Equity: {data.totalStockholdersEquity}</p>
+    //                 <p>Revenue: {data.revenue}</p>
+    //                 <p>EBIT: {data.ebit}</p>
+    //                 <p>Net Income: {data.netIncome}</p>
+    //             </div>
+    //         ))}
+           
+            
+    //         <div>
+              
+    //         {fiveYearMetrics.map((data) => (
+    //           console.log("inside map"),
+    //           console.log("data year: " + data.fiscalYear),
+                
+    //             <div key={data.fiscalYear} >
+                   
+    //                 <CompanyCard
+    //                     fiscalYear={data.fiscalYear}
+    //                     company={company}
+    //                     currentRatio={data.currentRatio}
+    //                     quickRatio={data.quickRatio}
+    //                     debtToEquity={data.debtToEquity}
+    //                     operatingMargin={data.operatingMargin}
+    //                     netMargin={data.netMargin}
+                        
+    //                 />
+    //             </div>
+                
+    //         ))}
+    //        {/* {currentData && (
+    //     <CompanyCard
+    //       fiscalYear={currentData.fiscalYear}
+    //       company={company}
+    //       currentRatio={currentData.currentRatio}
+    //       quickRatio={currentData.quickRatio}
+    //       debtToEquity={currentData.debtToEquity}
+    //       operatingMargin={currentData.operatingMargin}
+    //       netMargin={currentData.netMargin}
+    //     /> */}
+    //   )
+    //   {/* <button onClick={handlePreviousButton}>Previous</button> */}
+            
+    //         </div>
+    //     </div>
+    // );
 }  

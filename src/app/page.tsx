@@ -3,11 +3,15 @@ import { fmpBalance, fmpIncome } from "./apiFunctions/financeFunctions";
 import Autocomplete from "./components/Autocomplete";
 import { usePathname } from "next/navigation";
 
+
+
 export default function CompanyPage() {
   
   const handleClick = async(data : FormData) => {
     "use server";
     const company = data.get('company') as string
+    
+
     
   };
 

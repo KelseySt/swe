@@ -44,12 +44,20 @@ const Autocomplete = () => {
       <input
         type="text"
         placeholder="Search..."
+        
         value={searchTerm}
         onChange={handleInputChange}
       />
       <ul>
         {results.map((result, index) => (
-          <li key={index}>{result}</li>
+          <li 
+            className={`hover:bg-[#B0ACE9]`} 
+            key={index} 
+            onClick={() => {
+              console.log("selected: ", result);
+
+            }}
+          >{result}</li>
         ))}
       </ul>
     </div>
