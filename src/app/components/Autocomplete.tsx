@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import {useRouter} from 'next/navigation'
 import { companies } from '../apiFunctions/companies';
 
 const abreviations = [
@@ -19,6 +20,7 @@ const abreviations = [
 const Autocomplete = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<string[]>([]);
+  const router = useRouter();
 
   const handleInputChange = (event : any) => {
     const { value } = event.target;
@@ -40,13 +42,14 @@ const Autocomplete = () => {
   };
 
   return (
-    <div>
+    <div className = "relative w-full max-w-md mx-auto mt-6">
       <input
         type="text"
-        placeholder="Search..."
+        placeholder="Search for a company abbreviation..."
         
         value={searchTerm}
         onChange={handleInputChange}
+        className = "w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-amber-500"
       />
       <ul>
         {results.map((result, index) => (
@@ -54,7 +57,8 @@ const Autocomplete = () => {
             className={`hover:bg-[#B0ACE9]`} 
             key={index} 
             onClick={() => {
-              console.log("selected: ", result);
+              router.push(`/company/${result}`);
+
 
             }}
           >{result}</li>
