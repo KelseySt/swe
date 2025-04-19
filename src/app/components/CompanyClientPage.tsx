@@ -6,6 +6,8 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { companies } from '@/app/apiFunctions/companies';
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
+// import PostForm from "../PostForm/page";
+import UserProfile from "../mock-user-profile/page";
 
 type Metric = {
   fiscalYear: string;
@@ -183,6 +185,12 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
 
         
       </div>
+      <div>
+        <UserProfile />
+     
     </div>
+    </div>
+   
+
   );
 }
