@@ -2,9 +2,16 @@
 import Link from 'next/link';
 import { useState } from "react";
 import {Card, CardHeader, CardBody, CardFooter, Divider, Input, Button, Tabs, Tab} from "@heroui/react";
+import { useRouter, useSearchParams } from 'next/navigation';
+
+
 
 export default function LoginPage() {
   const [loginData, setLoginData] = useState({username: '', password: '' }); 
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoginData({ ...loginData, [e.target.name]: e.target.value });
@@ -13,6 +20,7 @@ export default function LoginPage() {
   const handleSubmit = () => {
     console.log('Login:', loginData);
     // backend stuff
+    router.push(redirectTo);
   };
 
 
@@ -26,27 +34,37 @@ export default function LoginPage() {
             type = "text"
             name = "username"
             label = "Username"
+            style = {{ backgroundColor: 'white'}}
             value = {loginData.username}
             onChange = {handleChange}
-            className = "mb-4"
+            classNames= {{
+              input: "rounded-md",
+              innerWrapper:"w-full mb-0 p-0"}}
             isRequired
           />
           <Input
             type = "password"
             name = "password"
             label = "Password"
+            style = {{ backgroundColor: 'white'}}
             value = {loginData.password}
             onChange = {handleChange}
-            className = "mb-4"
+            classNames= {{
+              input: "rounded-md",
+              innerWrapper:"w-full mb-0 p-0"}}
             isRequired
           />
-          <Button color = "primary" fullWidth onClick = {handleSubmit}>
+          <Button 
+          fullWidth 
+          onPress = {handleSubmit}
+          style = {{ backgroundColor: "#BFB1C1"}}
+          className = "text-white p-2 rounded" >
             Log In
           </Button>
         </CardBody>
         <CardFooter className = "text-sm text-center">
             Don't have an account?{' '}
-            <Link href = "/signup" className='text-blue-500 ml-1 underline'>
+            <Link href = {`/signup?redirect=${encodeURIComponent(redirectTo)}`} className='text-blue-500 ml-1 underline'>
             Sign up here
             </Link>
         </CardFooter>
