@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import RedirectAuth from './components/RedirectAuth';import Navbar from "./components/Navbar";
+import RedirectAuth from './components/RedirectAuth';
+import Navbar from "./components/Navbar";
 
 
 
