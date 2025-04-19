@@ -63,6 +63,7 @@ const PostForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log(formData);
 
     if (!selectedUserId || !selectedCompany) {
       setStatusMessage({
