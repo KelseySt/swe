@@ -20,6 +20,7 @@ export default function RootLayout({
     
     <html lang="en">
       <body>
+        <Navbar title="Business Health" />
         <RedirectAuth />
         {children}
         
