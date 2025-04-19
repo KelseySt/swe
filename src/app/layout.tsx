@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "./components/Navbar";
+import RedirectAuth from './components/RedirectAuth';import Navbar from "./components/Navbar";
 
 
 
@@ -19,8 +19,7 @@ export default function RootLayout({
     
     <html lang="en">
       <body>
-      <Navbar title = "Business Health" />
-        
+        <RedirectAuth />
         {children}
         
       </body>

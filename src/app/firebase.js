@@ -7,15 +7,20 @@ import { getFirestore } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: FIREBASE_API_KEY,
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "swe6050-822c6.firebaseapp.com",
   projectId: "swe6050-822c6",
   storageBucket: "swe6050-822c6.firebasestorage.app",
   messagingSenderId: "620592048949",
-  appId: FIREBASE_APP_ID
+  appId: process.env.FIREBASE_APP_ID
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-export const db = getFirestore(app);
+export { db };
+
+console.log(db);
+
+
