@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-
+import RedirectAuth from './components/RedirectAuth';
 
 
 
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        
+        <RedirectAuth />
         {children}
         
       </body>
