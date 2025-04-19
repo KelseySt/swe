@@ -66,6 +66,7 @@ const testData = [
 
 export default async function CompanyPage({params, }: { params: Promise<{ company: string }>}) {
     const { company } = await params;
+    
     console.log(company);
     
 
@@ -83,7 +84,7 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
     // // to make an effective company page display
     return (
       <div className="flex flex-col h-screen">
-        <h1 className="text-5xl font-bold text-center mt-4 mb-20">{company} Stats</h1>
+        <h1 className="text-5xl font-bold text-center mt-4 mb-20">{company}</h1>
         <div className="flex-1">
           <CompanyClientPage company={company} metrics={fiveYearMetrics} />
         </div>

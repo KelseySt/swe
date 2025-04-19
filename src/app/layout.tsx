@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import RedirectAuth from './components/RedirectAuth';
+import Navbar from "./components/Navbar";
+
 
 
 
@@ -15,6 +17,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    
     <html lang="en">
       <body>
         <RedirectAuth />
