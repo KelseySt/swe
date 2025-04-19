@@ -16,7 +16,7 @@ export default function CompanyPage() {
   return (
     <div>
       {/* NavBar at the top */}
-      <Navbar title="Business Health" />
+      {/* <Navbar title="Business Health" /> */}
 
       <div className="p-6">
         <form action={handleClick}>
