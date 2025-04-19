@@ -13,6 +13,8 @@ export default function CompanyPage() {
     // const income = await fmpIncome(company);
   };
 
+
+export default function Home() {
   return (
     <div>
       {/* NavBar at the top */}
