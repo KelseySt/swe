@@ -8,7 +8,7 @@ export default function RedirectAuth() {
   const router = useRouter();
 
   // testing redirect – replace backend
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   useEffect(() => {
     const isPublic = pathname === '/' || pathname === '/login' || pathname === '/signup';
