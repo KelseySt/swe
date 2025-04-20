@@ -33,7 +33,7 @@ export default function LoginPage() {
           <Input
             type = "text"
             name = "username"
-            label = "Username"
+            placeholder = "Username"
             style = {{ backgroundColor: 'white'}}
             value = {loginData.username}
             onChange = {handleChange}
@@ -45,7 +45,7 @@ export default function LoginPage() {
           <Input
             type = "password"
             name = "password"
-            label = "Password"
+            placeholder = "Password"
             style = {{ backgroundColor: 'white'}}
             value = {loginData.password}
             onChange = {handleChange}
@@ -54,13 +54,15 @@ export default function LoginPage() {
               innerWrapper:"w-full mb-0 p-0"}}
             isRequired
           />
+          <div className="flex justify-center">
           <Button 
-          fullWidth 
+          /*fullWidth */
           onPress = {handleSubmit}
           style = {{ backgroundColor: "#BFB1C1"}}
-          className = "text-white p-2 rounded" >
+          className = "text-white p-2 rounded w-17 h-8" >
             Log In
           </Button>
+          </div>
         </CardBody>
         <CardFooter className = "text-sm text-center">
             Don't have an account?{' '}
