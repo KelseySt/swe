@@ -15,9 +15,9 @@ export default function Navbar({
   color = "bg-blue-900", 
   links = [
     { label: 'Home', href: '/' },
-    { label: 'About', href: '/about' },
-    { label: 'Services', href: '/services' },
-    { label: 'Contact', href: '/contact' }
+    { label: 'Login', href: '/login' },
+    { label: 'Sign Up', href: '/signup' },
+    { label: 'User Profile', href: '/mock-user-profile' }
   ]
 }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
