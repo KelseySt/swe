@@ -29,7 +29,7 @@ export default function SignupPage() {
         <Input
           type="text"
           name="username"
-          label="Username"
+          placeholder="Username"
           style = {{ backgroundColor: 'white'}}
           value={SignupData.username}
           onChange={handleChange}
@@ -41,7 +41,7 @@ export default function SignupPage() {
         <Input
           type="email"
           name="email"
-          label="Email"
+          placeholder="Email"
           style = {{ backgroundColor: 'white'}}
           value={SignupData.email}
           onChange={handleChange}
@@ -53,7 +53,7 @@ export default function SignupPage() {
         <Input
           type="password"
           name="password"
-          label="Password"
+          placeholder="Password"
           style = {{ backgroundColor: 'white'}}
           value={SignupData.password}
           onChange={handleChange}
@@ -62,13 +62,15 @@ export default function SignupPage() {
             innerWrapper:"w-full mb-0 p-0"}}
           isRequired
         />
-        <Button
-        fullWidth 
-        onPress={handleSubmit}
-        style = {{ backgroundColor: "#BFB1C1"}}
-        className="text-white p-2 rounded">
-          Sign Up
-        </Button>
+        <div className="flex justify-center">
+          <Button 
+          /*fullWidth */
+          onPress = {handleSubmit}
+          style = {{ backgroundColor: "#BFB1C1"}}
+          className = "text-white p-2 rounded w-20 h-8" >
+            Sign Up
+          </Button>
+          </div>
       </CardBody>
       <CardFooter className="text-sm text-center">
         Already have an account?{' '}
