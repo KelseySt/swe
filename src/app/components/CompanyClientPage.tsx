@@ -9,6 +9,8 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart
 // import PostForm from "../PostForm/page";
 import UserProfile from "../mock-user-profile/page";
 import PostForm from "../mock-post/page";
+import PostHistory from "../mock-post-history/page";
+import AlumniCard from "./AlumniCard";
 
 type Metric = {
   fiscalYear: string;
@@ -181,13 +183,16 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
               <Legend />
             </LineChart>
           </div>
+          <PostForm />
+          <PostHistory />
+          <AlumniCard />
 
         </div>
 
         
       </div>
       <div>
-        <PostForm />
+        
         {/* <UserProfile /> */}
      
     </div>

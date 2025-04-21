@@ -44,7 +44,7 @@ const PostForm = () => {
       const userDoc = await getDoc(doc(db, "users", selectedUserId));
       const userData = userDoc.data();
       if (userData && userData.companies?.length > 0) {
-        setSelectedCompany(userData.companies[0]); // Default to first company
+        setSelectedCompany(userData.companies[0]);
       } else {
         setSelectedCompany("");
       }
@@ -63,7 +63,6 @@ const PostForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
 
     if (!selectedUserId || !selectedCompany) {
       setStatusMessage({
@@ -94,40 +93,41 @@ const PostForm = () => {
         text: "Post successfully created!",
         type: "success",
       });
+     
     } catch (error) {
       setStatusMessage({ text: "Failed to create post.", type: "error" });
     }
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-3xl text-purple-300 font-semibold mb-6 text-center">
-        Create Post
-      </h1>
+    <div className="p-6 bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-auto mt-10">
+      <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Create a Post
+      </h2>
 
       {statusMessage && (
         <div
-          className={`mb-6 px-4 py-3 rounded text-center font-medium ${
-            statusMessage.type === "success" ? "bg-green-600" : "bg-red-600"
+          className={`mb-4 px-4 py-2 rounded text-sm font-medium text-center ${
+            statusMessage.type === "success"
+              ? "bg-green-100 text-green-800"
+              : "bg-red-100 text-red-800"
           }`}
         >
           {statusMessage.text}
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="max-w-xl mx-auto space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm text-purple-400 mb-1">
-            Select User
-          </label>
+          <label className="block text-sm text-gray-600 mb-1">User</label>
           <select
             value={selectedUserId}
             onChange={(e) => setSelectedUserId(e.target.value)}
-            className="w-full bg-transparent border border-purple-600 rounded px-3 py-2 text-white"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             required
           >
             <option value="" disabled>
-              Choose a user
+              Select a user
             </option>
             {users.map((user) => (
               <option key={user.id} value={user.id}>
@@ -138,17 +138,15 @@ const PostForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm text-purple-400 mb-1">
-            Select Company
-          </label>
+          <label className="block text-sm text-gray-600 mb-1">Company</label>
           <select
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
-            className="w-full bg-transparent border border-purple-600 rounded px-3 py-2 text-white"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             required
           >
             <option value="" disabled>
-              Choose a company
+              Select a company
             </option>
             {users
               .find((u) => u.id === selectedUserId)
@@ -161,27 +159,27 @@ const PostForm = () => {
         </div>
 
         <div>
-          <label className="block text-sm text-purple-400 mb-1">
-            Post Description
+          <label className="block text-sm text-gray-600 mb-1">
+            Description
           </label>
           <textarea
             name="description"
             value={formData.description}
             onChange={handleInputChange}
             rows={4}
-            className="w-full bg-transparent border border-purple-600 rounded px-3 py-2 text-white"
-            placeholder="Enter a description for the post"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            placeholder="Write your post..."
             required
           />
         </div>
 
         <div>
-          <label className="block text-sm text-purple-400 mb-1">Status</label>
+          <label className="block text-sm text-gray-600 mb-1">Status</label>
           <select
             name="status"
             value={formData.status}
             onChange={handleInputChange}
-            className="w-full bg-transparent border border-purple-600 rounded px-3 py-2 text-white"
+            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-400"
             required
           >
             <option value="student">Student</option>
@@ -190,13 +188,12 @@ const PostForm = () => {
           </select>
         </div>
 
-        {/* Submit */}
-        <div className="text-center">
+        <div className="pt-4 text-center">
           <button
             type="submit"
-            className="bg-purple-600 hover:bg-purple-500 text-white px-6 py-2 rounded"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-6 py-2 rounded transition-colors"
           >
-            Create Post
+            Submit Post
           </button>
         </div>
       </form>
@@ -205,3 +202,4 @@ const PostForm = () => {
 };
 
 export default PostForm;
+

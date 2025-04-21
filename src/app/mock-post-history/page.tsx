@@ -108,28 +108,32 @@ const PostHistory = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-3xl text-purple-300 font-semibold mb-6 text-center">
+    <div className="bg-[#E3F7EC] text-[#071108] p-8 max-w-6xl mx-auto w-full">
+      
+      <h1 className="text-3xl text-[#233889] font-bold mb-6 text-center">
         Post History
       </h1>
 
       {statusMessage && (
         <div
           className={`mb-6 px-4 py-3 rounded text-center font-medium ${
-            statusMessage.type === "success" ? "bg-green-600" : "bg-red-600"
+            statusMessage.type === "success"
+              ? "bg-green-200 text-green-800"
+              : "bg-red-200 text-red-800"
           }`}
         >
           {statusMessage.text}
         </div>
       )}
+
       <div className="max-w-xl mx-auto mb-6">
-        <label className="block text-sm text-purple-400 mb-2">
+        <label className="block text-sm text-[#233889] font-medium mb-2">
           Select User
         </label>
         <select
           value={selectedUserId}
           onChange={(e) => setSelectedUserId(e.target.value)}
-          className="w-full bg-transparent border border-purple-600 rounded px-3 py-2 text-white"
+          className="w-full bg-white border border-[#D8C0CF] text-[#071108] rounded px-3 py-2"
         >
           <option value="">Choose a user</option>
           {users.map((user) => (
@@ -141,25 +145,25 @@ const PostHistory = () => {
       </div>
 
       {posts.length === 0 ? (
-        <p className="text-center text-gray-400">No posts to show.</p>
+        <p className="text-center text-[#233889]">No posts to show.</p>
       ) : (
         <div className="space-y-4 max-w-2xl mx-auto">
           {posts.map((post) => (
             <div
               key={post.id}
-              className="bg-gray-900 border border-purple-700 rounded-lg p-4 shadow flex justify-between items-center gap-4"
+              className="bg-white border border-[#D8C0CF] rounded-lg p-4 shadow flex justify-between items-center gap-4 "
             >
               <div>
-                <p className="text-lg text-purple-300 font-medium">
+                <p className="text-lg text-[#233889] font-medium">
                   {post.description}
                 </p>
-                <p className="text-sm text-gray-400">
+                <p className="text-sm text-[#071108]">
                   Status: {post.status} | Company: {post.company}
                 </p>
               </div>
               <button
                 onClick={() => handleDelete(post.id)}
-                className="bg-red-600 hover:bg-red-500 text-white mt-2 px-4 py-1 rounded text-sm self-start center "
+                className="bg-red-500 hover:bg-red-400 text-white px-4 py-1 rounded text-sm"
               >
                 Delete
               </button>
@@ -172,3 +176,4 @@ const PostHistory = () => {
 };
 
 export default PostHistory;
+
