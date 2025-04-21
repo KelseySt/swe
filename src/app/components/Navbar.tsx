@@ -1,8 +1,8 @@
 // src/app/components/Navbar.tsx
-"use client"
+"use client";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
+import React, { useState } from "react";
+import Link from "next/link";
 
 type NavbarProps = {
   title: string;
@@ -10,15 +10,15 @@ type NavbarProps = {
   links?: Array<{ label: string; href: string }>;
 };
 
-export default function Navbar({ 
-  title, 
-  color = "bg-blue-900", 
+export default function Navbar({
+  title,
+  color = "bg-blue-900",
   links = [
-    { label: 'Home', href: '/' },
-    { label: 'Login', href: '/login' },
-    { label: 'Sign Up', href: '/signup' },
-    { label: 'User Profile', href: '/mock-user-profile' }
-  ]
+    { label: "Home", href: "/" },
+    { label: "Login", href: "/login" },
+    { label: "Sign Up", href: "/signup" },
+    { label: "User Profile", href: "/user-profile" },
+  ],
 }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -32,7 +32,7 @@ export default function Navbar({
               {title}
             </Link>
           </div>
-          
+
           {/* Desktop menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
@@ -47,7 +47,7 @@ export default function Navbar({
               ))}
             </div>
           </div>
-          
+
           {/* Mobile menu button */}
           <div className="md:hidden flex items-center">
             <button
@@ -58,7 +58,7 @@ export default function Navbar({
               <span className="sr-only">Open main menu</span>
               {/* Hamburger icon */}
               <svg
-                className={`${isMenuOpen ? 'hidden' : 'block'} h-8 w-8`}
+                className={`${isMenuOpen ? "hidden" : "block"} h-8 w-8`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -74,7 +74,7 @@ export default function Navbar({
               </svg>
               {/* Close icon */}
               <svg
-                className={`${isMenuOpen ? 'block' : 'hidden'} h-8 w-8`}
+                className={`${isMenuOpen ? "block" : "hidden"} h-8 w-8`}
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
@@ -94,7 +94,7 @@ export default function Navbar({
       </div>
 
       {/* Mobile menu, show/hide based on menu state */}
-      <div className={`${isMenuOpen ? 'block' : 'hidden'} md:hidden`}>
+      <div className={`${isMenuOpen ? "block" : "hidden"} md:hidden`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
           {links.map((link) => (
             <Link
