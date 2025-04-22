@@ -15,6 +15,7 @@ type CompanyCardProps = {
   fiscalYear: string;
   company: string;
   companyLink: string;
+  companyLogo: string;
   currentRatio: number;
   quickRatio: number;
   debtToEquity: number;
@@ -30,6 +31,7 @@ export default function CompanyCard({
   fiscalYear,
   company,
   companyLink,
+  companyLogo,
   currentRatio,
   quickRatio,
   debtToEquity,
@@ -57,10 +59,10 @@ export default function CompanyCard({
           <CardHeader className="flex items-center gap-4 px-6 py-4">
             <Image
               alt="Company Logo"
-              height={48}
-              width={48}
+              height={35}
+              width={100}
               radius="sm"
-              src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+              src={companyLogo}
             />
             <div className="flex flex-col">
               <p className="text-lg font-semibold text-[#071108]">{company}</p>

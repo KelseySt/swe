@@ -38,6 +38,7 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
   const companyAbbrev = company;
   const companyFullName = companyObject ? companyObject.name : company;
   const companyLink = companyObject ? companyObject.link : "#";
+  const companyLogo = companyObject ? companyObject.logo : "#";
 
  
   const firstYear = metrics[metrics.length - 1];
@@ -57,6 +58,7 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
               fiscalYear={currentData.fiscalYear}
               company={companyFullName}
               companyLink = {companyLink}
+              companyLogo = {companyLogo}
               currentRatio={currentData.currentRatio}
               quickRatio={currentData.quickRatio}
               debtToEquity={currentData.debtToEquity}
@@ -189,7 +191,13 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
           </div>
           <PostForm />
           <PostHistory />
-          <AlumniCard companyAb={companyAbbrev}/>
+
+          {/* UNCOMMENT/COMMENT THIS FOR HARD CODE APPROACH */}
+           <AlumniCard companyAb={companyAbbrev}/> 
+           
+          {/* UNCOMMENT THIS FOR SCRAPE LOGIC APPROACH */}
+         
+          {/* <AlumniCard school = "University of Georgia" company = {companyFullName} /> */}
 
         </div>
 
