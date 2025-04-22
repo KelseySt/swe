@@ -14,7 +14,7 @@ interface UserPostsProps {
   userId: string;
 }
 
-const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
+const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [editingPost, setEditingPost] = useState<Post | null>(null); // Track the post being edited
   const [newDescription, setNewDescription] = useState<string>(""); // Store new description for editing
@@ -177,4 +177,4 @@ const UserPosts: React.FC<UserPostsProps> = ({ userId }) => {
   );
 };
 
-export default UserPosts;
+export default UserPostHistory;
