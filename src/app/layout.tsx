@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import RedirectAuth from './components/RedirectAuth';
 import Navbar from "./components/Navbar";
+import RedirectAuth from "./components/RedirectAuth";
 
 
 
@@ -17,13 +17,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    
     <html lang="en">
       <body>
         <Navbar title="Business Health" />
         <RedirectAuth />
         {children}
-        
       </body>
     </html>
   );

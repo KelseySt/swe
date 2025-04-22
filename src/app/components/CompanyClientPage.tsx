@@ -1,11 +1,17 @@
 // 'use client';
 'use client';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CompanyCard from "./CompanyCard";
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { companies } from '@/app/apiFunctions/companies';
 import { ArrowUpIcon, ArrowDownIcon } from '@heroicons/react/24/solid';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from 'recharts';
+// import PostForm from "../PostForm/page";
+import UserProfile from "../mock-user-profile/page";
+import PostForm from "../mock-post/page";
+import PostHistory from "../mock-post-history/page";
+import AlumniCard from "./AlumniCard";
+import { fetchLinkedInFromDuckDuckGo } from "../apiFunctions/duckScraper";
 
 type Metric = {
   fiscalYear: string;
@@ -29,7 +35,10 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
 
   const currentData = metrics[index];
   const companyObject = companies.find((c) => c.abrev === company);
+  const companyAbbrev = company;
   const companyFullName = companyObject ? companyObject.name : company;
+  const companyLink = companyObject ? companyObject.link : "#";
+  const companyLogo = companyObject ? companyObject.logo : "#";
 
  
   const firstYear = metrics[metrics.length - 1];
@@ -39,7 +48,7 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
   const netMarginChange = mostRecentYear.netMargin - firstYear.netMargin;
   const isIncrease = netMarginChange > 0;
   const percentageChange = ((netMarginChange / firstYear.netMargin) * 100).toFixed(2);
-
+  
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br p-6">
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-[1200px] p-10 space-y-6">
@@ -48,6 +57,8 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
             <CompanyCard
               fiscalYear={currentData.fiscalYear}
               company={companyFullName}
+              companyLink = {companyLink}
+              companyLogo = {companyLogo}
               currentRatio={currentData.currentRatio}
               quickRatio={currentData.quickRatio}
               debtToEquity={currentData.debtToEquity}
@@ -178,11 +189,27 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
               <Legend />
             </LineChart>
           </div>
+          <PostForm />
+          <PostHistory />
+
+          {/* UNCOMMENT/COMMENT THIS FOR HARD CODE APPROACH */}
+           <AlumniCard companyAb={companyAbbrev}/> 
+           
+          {/* UNCOMMENT THIS FOR SCRAPE LOGIC APPROACH */}
+         
+          {/* <AlumniCard school = "University of Georgia" company = {companyFullName} /> */}
 
         </div>
 
         
       </div>
+      <div>
+        
+        {/* <UserProfile /> */}
+     
     </div>
+    </div>
+   
+
   );
 }
