@@ -5,6 +5,7 @@ interface PersonalInformationProps {
     username: string;
     password: string;
     name: string;
+    email: string;
     companies: string[];
   };
   isEditing: boolean;
@@ -81,6 +82,19 @@ const PersonalInformation: React.FC<PersonalInformationProps> = ({
               type="text"
               value={formData.name}
               onChange={(e) => handleInputChange(e, "name")}
+              className="w-full bg-transparent border border-blue-600 rounded px-3 py-2 text-black"
+              required
+              disabled={!isEditing} // Disabled if not in editing mode
+            />
+          </div>
+
+          {/* Email input */}
+          <div className="mb-4">
+            <label className="block text-sm text-blue-400 mb-1">Email</label>
+            <input
+              type="emqil"
+              value={formData.email}
+              onChange={(e) => handleInputChange(e, "email")}
               className="w-full bg-transparent border border-blue-600 rounded px-3 py-2 text-black"
               required
               disabled={!isEditing} // Disabled if not in editing mode

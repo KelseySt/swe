@@ -19,6 +19,7 @@ const UserProfile = () => {
     username: "",
     password: "",
     name: "",
+    email: "",
     companies: [] as string[],
   });
   const [isEditing, setIsEditing] = useState(false);
@@ -52,6 +53,7 @@ const UserProfile = () => {
           username: userData.username || "",
           password: userData.password || "",
           name: userData.name || "",
+          email: userData.email || "",
           companies: userData.companies || [],
         });
       }
