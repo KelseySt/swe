@@ -189,7 +189,7 @@ export default function CompanyClientPage({ company, metrics }: { company: strin
           </div>
           <PostForm />
           <PostHistory />
-          <AlumniCard />
+          <AlumniCard companyAb={companyAbbrev}/>
 
         </div>
 
