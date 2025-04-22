@@ -1,13 +1,28 @@
 "use client";
 import React from "react";
 import {Card, CardHeader, CardBody, CardFooter, Link} from "@heroui/react";
+import { fetchLinkedInFromDuckDuckGo } from "@/app/apiFunctions/duckScraper";
 
 
-export default function AlumniCard() {
-
-
-  return (
+export default function AlumniCard() {  
     
+    //google
+    const peopleInformation = [
+        {name: "Zoey Lang",
+            headline : "Software Engineer at Google",
+            link: "ddd", //linkedin
+        },
+        {name: "Alex Rivera",
+            headline : "Product Manager at Google",
+            link: "ddd", //linkedin
+        }
+    ]
+
+    const [people, setPeople] = React.useState<any[]>([]);
+
+
+    
+  return (    
     <Card className="max-w-[340px] p-6 bg-white rounded-2xl shadow-xl w-full max-w-2xl mx-auto mt-10">
         <h1 className="text-3xl text-[#233889] font-bold mb-6 text-center">Alumni</h1>
         <div className="bg-white border border-[#D8C0CF] rounded-lg p-4 shadow flex flex-col justify-between items-center">

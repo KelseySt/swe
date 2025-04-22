@@ -14,6 +14,7 @@ import { useState } from "react";
 type CompanyCardProps = {
   fiscalYear: string;
   company: string;
+  companyLink: string;
   currentRatio: number;
   quickRatio: number;
   debtToEquity: number;
@@ -28,6 +29,7 @@ type CompanyCardProps = {
 export default function CompanyCard({
   fiscalYear,
   company,
+  companyLink,
   currentRatio,
   quickRatio,
   debtToEquity,
@@ -58,17 +60,17 @@ export default function CompanyCard({
               height={48}
               width={48}
               radius="sm"
-              src="https://avatars.githubusercontent.com/u/86160567?s=200&v=4"
+              src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
             />
             <div className="flex flex-col">
               <p className="text-lg font-semibold text-[#071108]">{company}</p>
               <Link
-                href="https://github.com/heroui-inc/heroui"
+                href={companyLink}
                 isExternal
                 className="text-sm text-[#233889] hover:underline"
                 showAnchorIcon
               >
-                {company}.com
+                {company}
               </Link>
             </div>
           </CardHeader>

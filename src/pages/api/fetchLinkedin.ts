@@ -8,14 +8,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { school, company } = req.body;
 
+ 
+
   if (!school || !company) {
     return res.status(400).json({ message: 'Missing school or company' });
   }
 
   try {
     const people = await fetchLinkedInFromDuckDuckGo(school, company);
+    
     return res.status(200).json(people);
   } catch (err: any) {
+    
     return res.status(500).json({ message: 'Scraper failed', error: err.message });
   }
 }

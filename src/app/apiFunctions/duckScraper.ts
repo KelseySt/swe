@@ -1,5 +1,3 @@
-
-
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
@@ -13,7 +11,7 @@ export async function fetchLinkedInFromDuckDuckGo(
   school: string,
   company: string
 ): Promise<Person[]> {
-  const query = `site:linkedin.com/in "${company}" "${school}"`;
+  const query = `site:linkedin.com "${company}" "${school}"`;
   const url = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
 
   const headers = {
@@ -46,7 +44,7 @@ export async function fetchLinkedInFromDuckDuckGo(
       const urlMatch = rawLink.match(/uddg=([^&]+)/);
       const decodedLink = urlMatch ? decodeURIComponent(urlMatch[1]) : '';
 
-      if (!decodedLink.includes('linkedin.com/in')) {
+      if (!decodedLink.includes('linkedin.com')) {
         console.log('Skipped link:', decodedLink);
       }
 
@@ -61,7 +59,7 @@ export async function fetchLinkedInFromDuckDuckGo(
         });
       }
     });
-
+    
     console.log('Scraped people:', people);
     return people;
   } catch (error: any) {

@@ -1,7 +1,7 @@
 
   // Available company options
   export const companies = [
-    { abrev: "AAPL", name: "Apple Inc.", link: "https://www.apple.com" },
+    { abrev: "AAPL", name: "Apple Inc.", link: "https://www.apple.com"},
     { abrev: "TSLA", name: "Tesla, Inc.", link: "https://www.tesla.com" },
     { abrev: "AMZN", name: "Amazon.com, Inc.", link: "https://www.amazon.com" },
     { abrev: "MSFT", name: "Microsoft Corporation", link: "https://www.microsoft.com" },
