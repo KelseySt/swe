@@ -13,7 +13,7 @@ export default function Home() {
       {/* <Navbar title="Business Health" /> */}
 
         <Autocomplete />
-        <CompanyGrid/>
+        
         <SavedCompanies />
     </div>
   );
