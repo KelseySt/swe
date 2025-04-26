@@ -1,13 +1,16 @@
 // src/app/components/Navbar.tsx
-"use client";
+'use client';
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { useAuth } from "@/app/useAuth";
+import { signInWithGoogle, logout } from "@/app/authService";
+import { useRouter } from "next/navigation";
 
 type NavbarProps = {
   title: string;
   color?: string;
-  links?: Array<{ label: string; href: string }>;
+  links?: Array<{ label: string; href: string, function?: string }> | null;
 };
 
 export default function Navbar({
@@ -15,12 +18,18 @@ export default function Navbar({
   color = "bg-blue-900",
   links = [
     { label: "Home", href: "/" },
-    { label: "Login", href: "/login" },
-    { label: "Sign Up", href: "/signup" },
+    { label: "Sign out", href: "/login", function: "logout" },
     { label: "User Profile", href: "/user-profile" },
   ],
 }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user } = useAuth();
+  const trueLinks = user ? links : [
+    { label: "Home", href: "/" },
+    { label: "Sign Up", href: "/login" },
+  ];
+
+  const router = useRouter();
 
   return (
     <nav className={`${color} shadow-lg`}>
@@ -36,15 +45,53 @@ export default function Navbar({
           {/* Desktop menu */}
           <div className="hidden md:block">
             <div className="ml-10 flex items-baseline space-x-4">
-              {links.map((link) => (
+                { user &&
+                <>
+                  <Link
+                    href='/'
+                    className="text-gray-200 hover:bg-blue-800 hover:text-white px-4 py-3 rounded-md text-base font-medium transition-colors duration-200"
+                
+                  >
+                    Home
+                  </Link>
+                  <Link
+                  href='/user-profile'
+                  className="text-gray-200 hover:bg-blue-800 hover:text-white px-4 py-3 rounded-md text-base font-medium transition-colors duration-200"
+                
+                >
+                  Profile
+                </Link>
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  href='/'
+                  onClick={logout}
                   className="text-gray-200 hover:bg-blue-800 hover:text-white px-4 py-3 rounded-md text-base font-medium transition-colors duration-200"
                 >
-                  {link.label}
+                  Signout
                 </Link>
-              ))}
+                </>
+                }
+                { !user && 
+                <>
+                <Link
+                  href='/'
+                  className="text-gray-200 hover:bg-blue-800 hover:text-white px-4 py-3 rounded-md text-base font-medium transition-colors duration-200"
+              
+                >
+                  Home
+                </Link>
+                
+              <Link
+                href='/'
+                onClick={signInWithGoogle}
+                className="text-gray-200 hover:bg-blue-800 hover:text-white px-4 py-3 rounded-md text-base font-medium transition-colors duration-200"
+              >
+                Login
+              </Link>
+              </>
+                
+                
+                }
+            
             </div>
           </div>
 
@@ -96,7 +143,7 @@ export default function Navbar({
       {/* Mobile menu, show/hide based on menu state */}
       <div className={`${isMenuOpen ? "block" : "hidden"} md:hidden`}>
         <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {links.map((link) => (
+          {trueLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

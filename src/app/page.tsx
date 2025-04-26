@@ -1,20 +1,15 @@
-
-
-
-import { fmpBalance, fmpIncome } from "./apiFunctions/financeFunctions";
+'use client';
 import Autocomplete from "./components/Autocomplete";
-import Navbar from "./components/Navbar";
-import { usePathname } from "next/navigation";
 import SavedCompanies from "./components/SavedCompanies";
-import CompanyGrid from './components/CompanyGrid';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+import { app } from "@/app/firebase";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
-
+  
   return (
     <div>
-      {/* NavBar at the top */}
-      {/* <Navbar title="Business Health" /> */}
-
         <Autocomplete />
         
         <SavedCompanies />

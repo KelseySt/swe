@@ -102,6 +102,7 @@ import React from "react";
 import {Card, CardHeader, CardBody, CardFooter, Link} from "@heroui/react";
 import { fetchLinkedInFromDuckDuckGo } from "@/app/apiFunctions/duckScraper";
 import { getLinkedInProfiles } from "../apiFunctions/linkedinProfiles";
+import { useAuth } from "../useAuth";
 
 interface AlumniCardProps {
     companyAb: string;
@@ -196,9 +197,10 @@ export default function AlumniCard({companyAb }: AlumniCardProps) {
     
       
 
-  
-
-
+    // Showing that only logged in users can see alumni
+    const { user } = useAuth();
+   
+    if(!user) return <div>Log in to see your alumni network!</div>;
     
     return (
         
