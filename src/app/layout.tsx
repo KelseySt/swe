@@ -14,6 +14,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  console.log('API Key:', process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
   return (
     <html lang="en">
       <body>
