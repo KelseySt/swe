@@ -1,154 +1,245 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import {
-  collection,
-  doc,
-  getDocs,
-  getDoc,
-  updateDoc,
-} from "firebase/firestore";
-import { db } from "../firebase";
+import React, { useState, useEffect } from "react";
+import { db } from "../firebase"; // Import Firestore
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import UserProfileHeader from "../components/UserProfileHeader";
-import PersonalInformation from "../components/UserPersonalInformation";
 import UserPostHistory from "../components/UserPostHistory";
+import { useAuth } from "@/app/useAuth";
 
 const UserProfile = () => {
-  const [users, setUsers] = useState<any[]>([]);
-  const [selectedUserId, setSelectedUserId] = useState<string>("");
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-    name: "",
-    email: "",
-    companies: [] as string[],
-  });
-  const [isEditing, setIsEditing] = useState(false);
+  const { user } = useAuth(); // Get the current authenticated user
+  const [userData, setUserData] = useState<any>(null); // Hold user data
+  const [isEditing, setIsEditing] = useState(false); // Switch between edit and view modes
   const [statusMessage, setStatusMessage] = useState<{
     text: string;
     type: "success" | "error";
   } | null>(null);
+  const [loading, setLoading] = useState(true); // Loading state to wait for user data
 
-  // Get the users in the database
+  // Fetch user data when the user is logged in
   useEffect(() => {
-    const fetchUsers = async () => {
-      const currData = await getDocs(collection(db, "users"));
-      const userList = currData.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setUsers(userList);
-    };
-    fetchUsers();
-  }, []);
+    console.log("User: " + user);
+    if (user) {
+      const fetchUserData = async () => {
+        try {
+          const userDocRef = doc(db, "users", user.uid); // Reference to the user's data in the database
+          const userDoc = await getDoc(userDocRef); // Fetch the user document
 
-  // Get data for users
-  useEffect(() => {
-    const fetchUserData = async () => {
-      if (!selectedUserId) return;
+          if (userDoc.exists()) {
+            setUserData(userDoc.data()); // Set user data if it exists
+          } else {
+            // If the user doesn't exist, create a new profile with default values
+            await setDoc(userDocRef, {
+              name: user.displayName || "Unnamed User",
+              email: user.email,
+              companies: [],
+              college: "",
+            });
+            setUserData({ name: user.displayName, email: user.email }); // Set default data
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setStatusMessage({
+            text: "Failed to fetch profile data",
+            type: "error",
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUserData();
+    } else {
+      setLoading(false);
+    }
+  }, [user]);
 
-      const userDoc = await getDoc(doc(db, "users", selectedUserId));
-      const userData = userDoc.data();
-      if (userData) {
-        setFormData({
-          username: userData.username || "",
-          password: userData.password || "",
-          name: userData.name || "",
-          email: userData.email || "",
-          companies: userData.companies || [],
+  // Handle profile update
+  const handleProfileUpdate = async () => {
+    if (user && userData) {
+      try {
+        const userDocRef = doc(db, "users", user.uid);
+        await updateDoc(userDocRef, {
+          name: userData.name, // Update name
+          college: userData.college || "", // Update college (optional)
+          companies: userData.companies || [], // Update companies (optional)
         });
+        setStatusMessage({
+          text: "Profile updated successfully",
+          type: "success",
+        });
+        setIsEditing(false); // Exit editing
+      } catch (error) {
+        console.error("Error updating profile:", error);
+        setStatusMessage({ text: "Failed to update profile", type: "error" });
       }
-    };
-    fetchUserData();
-  }, [selectedUserId]);
-
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    field: string
-  ) => {
-    setFormData({ ...formData, [field]: e.target.value });
-  };
-
-  const handleCompanyChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    index: number
-  ) => {
-    const updatedCompanies = [...formData.companies];
-    updatedCompanies[index] = e.target.value;
-    setFormData({ ...formData, companies: updatedCompanies });
-  };
-
-  const handleAddCompany = () => {
-    setFormData({
-      ...formData,
-      companies: [...formData.companies, ""],
-    });
-  };
-
-  const handleDeleteCompany = (index: number) => {
-    const updatedCompanies = formData.companies.filter((_, i) => i !== index);
-    setFormData({ ...formData, companies: updatedCompanies });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!selectedUserId) return;
-
-    try {
-      await updateDoc(doc(db, "users", selectedUserId), formData);
-      setStatusMessage({ text: "User updated successfully", type: "success" });
-      setIsEditing(false);
-    } catch (error) {
-      setStatusMessage({ text: "Failed to update user", type: "error" });
     }
   };
 
+  if (loading) {
+    return <div>Loading...</div>; // Show loading message while fetching user data
+  }
+
+  if (!user) {
+    return <div>Please log in to view your profile.</div>; // Show if no user is logged in
+  }
+
   return (
     <div className="min-h-screen bg-[#c7dbe6] text-black flex justify-center items-center px-4 mt-2 mb-2">
-      <div className="w-full max-w-xl bg-blue-50 p-8 rounded-lg shadow-xl border border-blue-800">
-        {/* User "icon" and name displayed at the top */}
-        <UserProfileHeader name={formData.name} />
+      <div className="w-full max-w-xl bg-blue-50 rounded-lg shadow-xl border border-blue-800">
+        {/* User profile header */}
+        <UserProfileHeader name={userData?.name || "Unnamed User"} />
 
-        <div className="mb-5">
-          <label className="block text-sm text-blue-400 mb-1">
-            Select User
-          </label>
-          <select
-            value={selectedUserId}
-            onChange={(e) => setSelectedUserId(e.target.value)}
-            className="w-full bg-transparent border border-blue-600 rounded px-3 py-2 text-black"
-          >
-            {/* Pick a user to pull the data for */}
-            <option value="">Choose a user</option>
-            {users.map((user) => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </select>
+        <div className="p-4">
+          <h2 className="text-2xl font-semibold text-blue-700 mb-4">Profile</h2>
+
+          {/* Status message */}
+          {statusMessage && (
+            <div
+              className={`mb-6 px-4 py-3 rounded text-center font-medium ${
+                statusMessage.type === "success" ? "bg-green-400" : "bg-red-400"
+              }`}
+            >
+              {statusMessage.text}
+            </div>
+          )}
+
+          {/* Profile form */}
+          {isEditing ? (
+            <form onSubmit={(e) => e.preventDefault()}>
+              <div className="mb-4">
+                <label className="block text-sm text-blue-800 font-medium">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  value={userData?.name || ""}
+                  onChange={(e) =>
+                    setUserData({ ...userData, name: e.target.value })
+                  }
+                  className="w-full p-2 mt-2 border border-blue-500 rounded"
+                  required
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm text-blue-800 font-medium">
+                  College
+                </label>
+                <input
+                  type="text"
+                  value={userData?.college || ""}
+                  onChange={(e) =>
+                    setUserData({ ...userData, college: e.target.value })
+                  }
+                  className="w-full p-2 mt-2 border border-blue-500 rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm text-blue-800 font-medium">
+                  Companies
+                </label>
+                {userData?.companies?.map((company: string, index: number) => (
+                  <div key={index} className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      value={company}
+                      onChange={(e) => {
+                        const updatedCompanies = [...userData.companies];
+                        updatedCompanies[index] = e.target.value;
+                        setUserData({
+                          ...userData,
+                          companies: updatedCompanies,
+                        });
+                      }}
+                      className="w-full p-2 border border-blue-500 rounded"
+                      placeholder={`Company ${index + 1}`}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const updatedCompanies = userData.companies.filter(
+                          (company: string, i: number) => i !== index
+                        );
+                        setUserData({
+                          ...userData,
+                          companies: updatedCompanies,
+                        });
+                      }}
+                      className="bg-red-600 hover:bg-red-700 text-white px-4 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() =>
+                    setUserData({
+                      ...userData,
+                      companies: [...userData.companies, ""],
+                    })
+                  }
+                  className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
+                >
+                  + Add Company
+                </button>
+              </div>
+
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={handleProfileUpdate}
+                  className="bg-blue-600 hover:bg-blue-500 text-white py-2 px-6 rounded"
+                >
+                  Save Changes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="bg-red-600 hover:bg-red-500 text-white py-2 px-6 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          ) : (
+            <div className="space-y-4">
+              <p>
+                <strong className="text-blue-600">Name:</strong>{" "}
+                {userData?.name || "Unnamed User"}
+              </p>
+              <p>
+                <strong className="text-blue-600">College:</strong>{" "}
+                {userData?.college || "Not Provided"}
+              </p>
+              <div>
+                <strong className="text-blue-600">Companies</strong>
+                <ul className="list-disc ml-5">
+                  {userData?.companies?.length ? (
+                    userData.companies.map((company: string, index: number) => (
+                      <li key={index}>{company}</li>
+                    ))
+                  ) : (
+                    <p>No companies listed</p>
+                  )}
+                </ul>
+              </div>
+
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded"
+              >
+                Edit Profile
+              </button>
+            </div>
+          )}
         </div>
 
-        {/* Personal information is pulled for a specific user */}
-        {selectedUserId && (
-          <PersonalInformation
-            formData={formData}
-            isEditing={isEditing}
-            statusMessage={statusMessage}
-            handleInputChange={handleInputChange}
-            handleCompanyChange={handleCompanyChange}
-            handleAddCompany={handleAddCompany}
-            handleDeleteCompany={handleDeleteCompany}
-            handleSubmit={handleSubmit}
-            startEditing={() => setIsEditing(true)}
-          />
-        )}
-
-        {/* Display UserPostHistory for a selected user if it exists */}
-        {selectedUserId && (
-          <div className="mt-8">
-            <UserPostHistory userId={selectedUserId} />
-          </div>
-        )}
+        {/* User post history */}
+        <div className="mt-8">
+          <UserPostHistory userId={user.uid} />
+        </div>
       </div>
     </div>
   );
