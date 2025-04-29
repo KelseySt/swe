@@ -28,13 +28,13 @@ const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
     const fetchPosts = async () => {
       if (!userId) return;
 
-      const userDoc = await getDoc(doc(db, "users", userId));
+      const userDoc = await getDoc(doc(db, "users", userId)); // get user data
       const userData = userDoc.data();
       if (userData && userData.posts) {
         const postDataList: Post[] = [];
 
-        for (let postRef of userData.posts) {
-          const postDoc = await getDoc(postRef);
+        for (let post of userData.posts) {
+          const postDoc = await getDoc(post); // get each post document
           if (postDoc.exists()) {
             const postData = postDoc.data() as Post;
             postDataList.push({
@@ -55,14 +55,14 @@ const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
   const handleDelete = async (postId: string) => {
     try {
       await deleteDoc(doc(db, "posts", postId));
-      const userDocRef = doc(db, "users", userId);
-      const userDoc = await getDoc(userDocRef);
+      const currUserDoc = doc(db, "users", userId);
+      const userDoc = await getDoc(currUserDoc);
       const userData = userDoc.data();
       if (userData && userData.posts) {
         const updatedPosts = userData.posts.filter(
           (postRef: any) => postRef.id !== postId
         );
-        await updateDoc(userDocRef, { posts: updatedPosts });
+        await updateDoc(currUserDoc, { posts: updatedPosts });
       }
       // Update state to remove the post from the list
       setPosts((prev) => prev.filter((post) => post.id !== postId));
