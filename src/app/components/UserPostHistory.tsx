@@ -1,6 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { db } from "../firebase";
-import { getDocs, doc, getDoc, deleteDoc, updateDoc } from "firebase/firestore";
+import {
+  getDocs,
+  doc,
+  getDoc,
+  deleteDoc,
+  updateDoc,
+  query,
+  where,
+  collection,
+} from "firebase/firestore";
 
 // Post structure
 type Post = {
@@ -54,20 +63,48 @@ const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
   // Handle delete post
   const handleDelete = async (postId: string) => {
     try {
-      await deleteDoc(doc(db, "posts", postId));
-      const currUserDoc = doc(db, "users", userId);
-      const userDoc = await getDoc(currUserDoc);
+      // Delete the post document from the "posts" collection
+      const postRef = doc(db, "posts", postId);
+      const postDoc = await getDoc(postRef);
+      if (!postDoc.exists()) {
+        setStatusMessage({ text: "Post does not exist.", type: "error" });
+        return;
+      }
+
+      // Delete the post document from Firestore
+      await deleteDoc(postRef);
+      console.log("Post deleted from posts collection.");
+
+      // Update the user's post history to remove the deleted post reference
+      const userDocRef = doc(db, "users", userId);
+      const userDoc = await getDoc(userDocRef);
       const userData = userDoc.data();
       if (userData && userData.posts) {
         const updatedPosts = userData.posts.filter(
           (postRef: any) => postRef.id !== postId
         );
-        await updateDoc(currUserDoc, { posts: updatedPosts });
+        await updateDoc(userDocRef, { posts: updatedPosts });
+        console.log("User's posts updated.");
       }
-      // Update state to remove the post from the list
-      setPosts((prev) => prev.filter((post) => post.id !== postId));
+
+      // Update the company's post history to remove the deleted post
+      const companyRef = doc(db, "posts", postId);
+      const companyDoc = await getDoc(companyRef);
+      const companyData = companyDoc.data();
+      if (companyData && companyData.posts) {
+        const updatedCompanyPosts = companyData.posts.filter(
+          (postRef: any) => postRef.id !== postId
+        );
+        await updateDoc(companyRef, { posts: updatedCompanyPosts });
+        console.log("Company's posts updated.");
+      }
+
+      // Update local state to reflect the deleted post
+      setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
+      console.log("Local post state updated.");
       setStatusMessage({ text: "Post successfully deleted.", type: "success" });
     } catch (error) {
+      console.error("Error during post deletion:", error);
       setStatusMessage({ text: "Failed to delete post.", type: "error" });
     }
   };
@@ -99,7 +136,7 @@ const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
   };
 
   return (
-    <div className="space-y-4 max-w-2xl mx-auto">
+    <div className="space-y-4 max-w-2xl mx-auto mr-2 ml-2 mb-2">
       {statusMessage && (
         <div
           className={`mb-6 px-4 py-3 rounded text-center font-medium ${
@@ -141,13 +178,13 @@ const UserPostHistory: React.FC<UserPostsProps> = ({ userId }) => {
                   />
                   <button
                     onClick={handleSaveEdit}
-                    className="mt-2 mr-2 bg-blue-600 text-white py-1 px-4 rounded"
+                    className="mt-2 mr-2 bg-blue-600 hover:bg-blue-700 text-white py-1 px-4 rounded"
                   >
                     Save
                   </button>
                   <button
                     onClick={() => setEditingPost(null)}
-                    className="mt-2 bg-red-600 text-white py-1 px-4 rounded"
+                    className="mt-2 bg-red-600 hover:bg-red-700 text-white py-1 px-4 rounded"
                   >
                     Cancel
                   </button>
