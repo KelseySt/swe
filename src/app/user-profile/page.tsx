@@ -6,6 +6,108 @@ import UserProfileHeader from "../components/UserProfileHeader";
 import UserPostHistory from "../components/UserPostHistory";
 import { useAuth } from "@/app/useAuth";
 
+const validAbbreviations = [
+  "AAPL",
+  "TSLA",
+  "AMZN",
+  "MSFT",
+  "NVDA",
+  "GOOGL",
+  "META",
+  "NFLX",
+  "JPM",
+  "V",
+  "BAC",
+  "AMD",
+  "PYPL",
+  "DIS",
+  "T",
+  "PFE",
+  "COST",
+  "INTC",
+  "KO",
+  "TGT",
+  "NKE",
+  "SPY",
+  "BA",
+  "BABA",
+  "XOM",
+  "WMT",
+  "GE",
+  "CSCO",
+  "VZ",
+  "JNJ",
+  "CVX",
+  "PLTR",
+  "SQ",
+  "SHOP",
+  "SBUX",
+  "SOFI",
+  "HOOD",
+  "RBLX",
+  "SNAP",
+  "AMD",
+  "UBER",
+  "FDX",
+  "ABBV",
+  "ETSY",
+  "MRNA",
+  "LMT",
+  "GM",
+  "F",
+  "RIVN",
+  "LCID",
+  "CCL",
+  "DAL",
+  "UAL",
+  "AAL",
+  "TSM",
+  "SONY",
+  "ET",
+  "NOK",
+  "MRO",
+  "COIN",
+  "RIVN",
+  "SIRI",
+  "SOFI",
+  "RIOT",
+  "CPRX",
+  "PYPL",
+  "TGT",
+  "VWO",
+  "SPYG",
+  "NOK",
+  "ROKU",
+  "HOOD",
+  "VIAC",
+  "ATVI",
+  "BIDU",
+  "DOCU",
+  "ZM",
+  "PINS",
+  "TLRY",
+  "WBA",
+  "VIAC",
+  "MGM",
+  "NFLX",
+  "NIO",
+  "C",
+  "GS",
+  "WFC",
+  "ADBE",
+  "PEP",
+  "UNH",
+  "CARR",
+  "FUBO",
+  "HCA",
+  "TWTR",
+  "BILI",
+  "SIRI",
+  "VIAC",
+  "FUBO",
+  "RKT",
+];
+
 const UserProfile = () => {
   const { user } = useAuth(); // Get the current authenticated user
   const [userData, setUserData] = useState<any>(null); // Hold user data
@@ -15,10 +117,11 @@ const UserProfile = () => {
     type: "success" | "error";
   } | null>(null);
   const [loading, setLoading] = useState(true); // Loading state to wait for user data
+  const [selectedCompany, setSelectedCompany] = useState(""); // Selected company abbreviation
+  const [companyError, setCompanyError] = useState(""); // Error message for invalid company abbreviation
 
   // Fetch user data when the user is logged in
   useEffect(() => {
-    console.log("User: " + user);
     if (user) {
       const fetchUserData = async () => {
         try {
@@ -75,6 +178,20 @@ const UserProfile = () => {
     }
   };
 
+  // Handle adding a new company abbreviation from the dropdown
+  const handleAddCompany = () => {
+    if (selectedCompany && !userData.companies.includes(selectedCompany)) {
+      setUserData({
+        ...userData,
+        companies: [...userData.companies, selectedCompany],
+      });
+      setSelectedCompany(""); // Clear selection
+      setCompanyError(""); // Clear error message
+    } else {
+      setCompanyError("Please select a valid company abbreviation.");
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>; // Show loading message while fetching user data
   }
@@ -90,7 +207,11 @@ const UserProfile = () => {
         <UserProfileHeader name={userData?.name || "Unnamed User"} />
 
         <div className="p-4">
-          <h2 className="text-2xl font-semibold text-blue-700 mb-4">Profile</h2>
+          <h2 className="text-2xl font-semibold text-blue-700 mb-4 flex items-center justify-center">
+            Profile
+          </h2>
+
+          <hr className="border-blue-800"></hr>
 
           {/* Status message */}
           {statusMessage && (
@@ -172,18 +293,34 @@ const UserProfile = () => {
                     </button>
                   </div>
                 ))}
-                <button
-                  type="button"
-                  onClick={() =>
-                    setUserData({
-                      ...userData,
-                      companies: [...userData.companies, ""],
-                    })
-                  }
-                  className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
-                >
-                  + Add Company
-                </button>
+
+                {/* Company Dropdown */}
+                <div className="flex gap-2 mb-2">
+                  <select
+                    value={selectedCompany}
+                    onChange={(e) => setSelectedCompany(e.target.value)}
+                    className="w-full p-2 border border-blue-500 rounded"
+                  >
+                    <option value="">Select a company</option>
+                    {validAbbreviations.map((abbreviation, index) => (
+                      <option key={index} value={abbreviation}>
+                        {abbreviation}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    onClick={handleAddCompany}
+                    className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded"
+                  >
+                    Add Company
+                  </button>
+                </div>
+
+                {/* Error message if invalid company */}
+                {companyError && (
+                  <p className="text-red-600 text-sm">{companyError}</p>
+                )}
               </div>
 
               <div className="flex gap-4">
