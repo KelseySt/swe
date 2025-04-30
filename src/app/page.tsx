@@ -5,14 +5,15 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { app } from "@/app/firebase";
 import { useRouter } from "next/navigation";
+import AutocompleteWithSaved from "./components/AutocompleteWithSaved";
 
 export default function Home() {
   
   return (
     <div>
-        <Autocomplete />
+        <AutocompleteWithSaved />
         
-        <SavedCompanies />
+        
     </div>
   );
 }
