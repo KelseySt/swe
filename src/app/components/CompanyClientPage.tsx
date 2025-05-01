@@ -51,6 +51,7 @@ export default function CompanyClientPage({
   const companyObject = companies.find((c) => c.abrev === company);
   const companyAbbrev = company;
   const companyFullName = companyObject ? companyObject.name : company;
+  const companyCommonName = companyObject?.commonName ?? "Unknown";
   const companyLink = companyObject ? companyObject.link : "#";
   const companyLogo = companyObject ? companyObject.logo : "#";
 
@@ -247,11 +248,11 @@ export default function CompanyClientPage({
           <PostHistory company={company} />
 
           {/* UNCOMMENT/COMMENT THIS FOR HARD CODE APPROACH */}
-          <AlumniCard companyAb={companyAbbrev} />
+          {/*<AlumniCard companyAb={companyAbbrev} />*/}
 
           {/* UNCOMMENT THIS FOR SCRAPE LOGIC APPROACH */}
 
-          {/* <AlumniCard school = "University of Georgia" company = {companyFullName} /> */}
+           <AlumniCard school = "University of Georgia" company = {companyCommonName} /> 
         </div>
       </div>
       <div>{/* <UserProfile /> */}</div>
