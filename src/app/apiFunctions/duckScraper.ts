@@ -33,7 +33,7 @@ export async function fetchLinkedInFromDuckDuckGo(
 ): Promise<Person[]> {
   const query = `site:linkedin.com "${company}" "${school}"`;
   const targetUrl = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
-  const proxyUrl = `http://localhost:5000/proxy?url=${encodeURIComponent(targetUrl)}`;
+  const proxyUrl = `http://localhost:8080/proxy?url=${encodeURIComponent(targetUrl)}`;
 
   console.log('Proxy URL:', proxyUrl);
   
@@ -74,7 +74,7 @@ export async function fetchLinkedInFromDuckDuckGo(
     console.log('Scraped people:', people);
     return people;
   } catch (error) {
-    console.error('Error in fetchLinkedInFromDuckDuckGo:', error.message);
+    console.error('Error in fetchLinkedInFromDuckDuckGo:', error);
     return [];
   }
 }
