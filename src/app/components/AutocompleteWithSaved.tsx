@@ -134,6 +134,7 @@ const getCompanyName = (ticker: string): string => {
   return companyNames[ticker] || `${ticker} Corp.`;
 };
 
+
 const AutocompleteWithSaved: React.FC = () => {
   const { user } = useAuth(); // Get the current logged in user
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -141,6 +142,7 @@ const AutocompleteWithSaved: React.FC = () => {
   const [savedCompanies, setSavedCompanies] = useState<Company[]>([]);
   const [savedTickers, setSavedTickers] = useState<Set<string>>(new Set());
   const router = useRouter();
+
 
   // Fetch saved companies from the database when user is logged in
   useEffect(() => {
@@ -217,6 +219,8 @@ const AutocompleteWithSaved: React.FC = () => {
     }
   };
 
+ 
+
   return (
     <div className="max-w-md mx-auto p-4">
       {/* Search Bar */}
@@ -239,10 +243,20 @@ const AutocompleteWithSaved: React.FC = () => {
               >
                 <span
                   className="flex-grow cursor-pointer"
-                  onClick={() => router.push(`/company/${ticker}`)}
+                  onClick={
+                    
+                    
+                    () => router.push(`/company/${ticker}`) // Navigate to the company page
+                    
+                    
+                  } // Use the new click handler
                 >
+                 
                   {ticker}
                 </span>
+
+               
+               
 
                 {savedTickers.has(ticker) ? (
                   <span className="text-green-600 flex items-center">
@@ -263,6 +277,12 @@ const AutocompleteWithSaved: React.FC = () => {
           </ul>
         )}
       </div>
+
+     
+   
+
+      
+    
 
       {/* Saved Companies List */}
       <div className="mt-8 bg-gray-100 rounded-lg p-4">
