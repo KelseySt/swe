@@ -32,84 +32,49 @@ export async function fetchLinkedInFromDuckDuckGo(
   company: string
 ): Promise<Person[]> {
   const query = `site:linkedin.com "${company}" "${school}"`;
-  const url = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
-  console.log('DuckDuckGo Lite URL:', url);
+  const targetUrl = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
+  const proxyUrl = `http://localhost:8080/proxy?url=${encodeURIComponent(targetUrl)}`;
+
+  console.log('Proxy URL:', proxyUrl);
+  
 
   const people: Person[] = [];
 
-  // Randomly select a User-Agent
-  const randomUserAgent = userAgents[Math.floor(Math.random() * userAgents.length)];
-  console.log('Using User-Agent:', randomUserAgent);
-
-  const headers = {
-    'User-Agent': randomUserAgent,
-    'Accept-Language': 'en-US,en;q=0.9',
-    'Cache-Control': 'no-cache', // Prevent caching
-    Pragma: 'no-cache', // Prevent caching
-  };
-
   try {
-    // Make the request with Axios
-    const response = await axios.get(url, { headers });
-
-    // Debugging: Log the HTML content
-    console.log('HTML content:', response.data);
+    const response = await axios.get(proxyUrl); // Use the proxy server
+    console.log('HTML content fetched successfully.');
+    console.log('HTML Content:', response.data);
 
     const $ = cheerio.load(response.data);
 
-    // Select all links with the class "result-link" (for LinkedIn profiles)
-    const links = $('a.result-link');
-    console.log('Number of matched links:', links.length);
-
-    links.each((i, el) => {
+    // Select all result links
+    $('a.result-link').each((i, el) => {
       if (people.length >= 40) return; // Limit to 40 results
 
       const rawLink = $(el).attr('href') || '';
       const text = $(el).text().trim();
 
-      // Decode the DuckDuckGo redirect URL if present
+      // Decode the LinkedIn URL from DuckDuckGo's redirect URL
       const decodedLink = decodeURIComponent(
         rawLink.match(/uddg=([^&]+)/)?.[1] || rawLink
       );
 
-      // Only include LinkedIn URLs
       if (decodedLink.includes('linkedin.com')) {
         const [name, ...headlineParts] = text.split(' - ');
         const headline = headlineParts.join(' - ') || '';
 
-        // Normalize the headline and company name for comparison
-        const normalizedHeadline = headline.toLowerCase();
-        const normalizedCompany = company.toLowerCase();
-
-        // Check if the headline contains any word from the company name
-        const companyWords = normalizedCompany.split(' ');
-        const isCompanyInHeadline = companyWords.some((word) =>
-          normalizedHeadline.includes(word)
-        );
-
-        // Only add the person if the company name is found in the headline
-        if (isCompanyInHeadline) {
-          people.push({
-            name: name.trim(),
-            headline: headline.trim(),
-            linkedinUrl: decodedLink, // Use the decoded LinkedIn URL
-          });
-        } else {
-          console.log('Skipped person due to unmatched company:', {
-            name: name.trim(),
-            headline: headline.trim(),
-            linkedinUrl: decodedLink,
-          });
-        }
-      } else {
-        console.log('Skipped link:', rawLink);
+        people.push({
+          name: name.trim(),
+          headline: headline.trim(),
+          linkedinUrl: decodedLink,
+        });
       }
     });
-    
+
     console.log('Scraped people:', people);
     return people;
-  } catch (error: any) {
-    console.error('DuckDuckGo Lite Scraper Error:', error.message || error);
+  } catch (error) {
+    console.error('Error in fetchLinkedInFromDuckDuckGo:', error);
     return [];
   }
 }
