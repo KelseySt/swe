@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { getLinkedInProfiles } from "../apiFunctions/linkedinProfiles"; // Import the function
 import { Person } from "../apiFunctions/duckScraper"; // Import the Person interface
-import { Card, CardHeader, CardBody } from "@heroui/react"; // Import the necessary components
+
 
 interface AlumniCardProps {
   school: string;
@@ -12,16 +12,28 @@ interface AlumniCardProps {
 export default function AlumniCard({ school, company }: AlumniCardProps) {
   const [profiles, setProfiles] = useState<Person[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     async function fetchProfiles() {
-      console.log("Fetching profiles in AlumniCard..."); // Debugging log
+      console.log(`Fetching profiles in AlumniCard for ${school} at ${company}...`); // Debugging log
+      
+      // Only proceed if we have valid school data
+      if (!school || school === "Unknown" || school === "") {
+        setError("Please add your college in your profile to see alumni");
+        setLoading(false);
+        return;
+      }
+      
       try {
         const linkedInProfiles = await getLinkedInProfiles(school, company);
-        console.log("Fetched profiles in AlumniCard:", linkedInProfiles); // Debugging log
+        console.log("Fetched profiles in AlumniCard:", linkedInProfiles); 
         setProfiles(linkedInProfiles);
+        setError(null);
       } catch (error) {
         console.error("Error fetching LinkedIn profiles in AlumniCard:", error);
+        setError("Failed to fetch alumni information");
+        setProfiles([]);
       } finally {
         setLoading(false);
       }
@@ -30,31 +42,69 @@ export default function AlumniCard({ school, company }: AlumniCardProps) {
     fetchProfiles();
   }, [school, company]);
 
+  // Loading state
   if (loading) {
-    return <div>Loading profiles...</div>;
+    return (
+      <div className="p-6 border rounded-xl shadow-lg w-full">
+        <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
+        <div className="animate-pulse space-y-4">
+          <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="h-16 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
   }
 
+  // Error state
+  if (error) {
+    return (
+      <div className="p-6 border rounded-xl shadow-lg w-full">
+        <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
+        <div className="text-red-500">{error}</div>
+        {(!school || school === "Unknown") && (
+          <div className="mt-4">
+            <p>To see alumni from your college at this company, please update your profile with your college information.</p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+
+  if (profiles.length === 0) {
+    return (
+      <div className="p-6 border rounded-xl shadow-lg w-full">
+        <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
+        <p>No alumni found from {school} at {company}.</p>
+      </div>
+    );
+  }
+  
   return (
-    <div className="max-h-[600px] overflow-y-auto space-y-4 p-4">
-      <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
-      {profiles.map((profile, index) => (
-        <Card key={index} className="shadow-md hover:shadow-lg transition-shadow duration-300">
-          <CardHeader>
-            <CardHeader>{profile.name}</CardHeader>
-          </CardHeader>
-          <CardBody className="space-y-2">
+    <div className="p-6 border rounded-xl shadow-lg w-full">
+      <h2 className="text-xl font-bold mb-4">{school} Alumni at {company}</h2>
+      <div className="max-h-[600px] overflow-y-auto space-y-4">
+        {profiles.map((profile, index) => (
+          <div key={index} className="border-b pb-3 last:border-b-0 hover:bg-gray-50 transition-colors duration-300">
+            <h4 className="text-lg font-medium">{profile.name}</h4>
             <p className="text-sm text-gray-600">{profile.headline}</p>
-            <a
-              href={profile.linkedinUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-blue-600 hover:underline text-sm"
-            >
-              View LinkedIn Profile
-            </a>
-          </CardBody>
-        </Card>
-      ))}
+            {profile.linkedinUrl && (
+              <a
+                href={profile.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:underline text-sm"
+              >
+                View LinkedIn Profile
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
+
+
+
