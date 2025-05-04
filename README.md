@@ -1,7 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Alumni Feature
-Due to budget constraints, to run the Alumni feature, a local proxy must be run. If you'd like to test the feature run these commands:
+Due to budget constraints, to run the Alumni feature, a local proxy server must be run for alumni backend functionality. If you'd like to test the feature run these commands:
 
 ```
 npm install
@@ -11,7 +11,10 @@ When you log in with Google, make sure to go to the User Profile page and add a 
 The live deployment can be found [here](https://swe-rosy.vercel.app/)
 
 
-If you would like to run the entire project locally follow these commands:
+If you would like to run the entire project locally:
+1. clone the repository
+2. add the api keys found near the end of the Project Plan to a .env or .env.local file
+2. follow these commands in your terminal in the project directory:
 
 ```
 npm install
