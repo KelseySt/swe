@@ -35,7 +35,7 @@ export async function fetchLinkedInFromDuckDuckGo(
 ): Promise<Person[]> {
   const query = `site:linkedin.com "${company}" "${school}"`;
   const targetUrl = `https://lite.duckduckgo.com/lite/?q=${encodeURIComponent(query)}`;
-  const proxyUrl = `http://localhost:8080/proxy?url=${encodeURIComponent(targetUrl)}`;
+  const proxyUrl = `https://puppeteer-proxy-jkso.onrender.com/proxy?url=${encodeURIComponent(targetUrl)}`;
 
   console.log('Proxy URL:', proxyUrl);
   
