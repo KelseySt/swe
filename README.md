@@ -11,7 +11,7 @@ When you log in with Google, make sure to go to the User Profile page and add a 
 The live deployment can be found [here](https://swe-rosy.vercel.app/)
 
 
-If you would like to run the entire project locally:
+## If you would like to run the entire project locally:
 1. clone the repository
 2. add the api keys found near the end of the Project Plan to a .env or .env.local file
 2. follow these commands in your terminal in the project directory:
