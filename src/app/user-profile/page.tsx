@@ -6,6 +6,7 @@ import UserProfileHeader from "../components/UserProfileHeader";
 import UserPostHistory from "../components/UserPostHistory";
 import { useAuth } from "@/app/useAuth";
 
+
 const validAbbreviations = [
   "AAPL",
   "TSLA",
@@ -193,7 +194,7 @@ const UserProfile = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>; // Show loading message while fetching user data
+    return <div>Loading...</div>; 
   }
 
   if (!user) {
