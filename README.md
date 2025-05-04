@@ -7,6 +7,7 @@ Due to budget constraints, to run the Alumni feature, a local proxy must be run.
 npm install
 npm run proxy
 ```
+When you log in with Google, make sure to go to the User Profile page and add a college affiliation (e.g., "University of California", "University of Georgia")
 The live deployment can be found [here](https://swe-rosy.vercel.app/)
 
 
@@ -15,7 +16,7 @@ If you would like to run the entire project locally follow these commands:
 ```
 npm install
 npm run proxy
-OPEN NEW TERMINAL WINDOW
+# OPEN NEW TERMINAL WINDOW
 npm run dev
 ```
 
