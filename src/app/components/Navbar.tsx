@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 type NavbarProps = {
   title: string;
   color?: string;
-  links?: Array<{ label: string; href: string, function?: string }> | null;
+  links?: Array<{ label: string; href: string, function?: string }>;
 };
 
 export default function Navbar({
