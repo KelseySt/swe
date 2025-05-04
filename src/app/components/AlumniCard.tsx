@@ -16,10 +16,13 @@ export default function AlumniCard({ school, company }: AlumniCardProps) {
 
   useEffect(() => {
     async function fetchProfiles() {
+      console.log("SCHOOLOL: " + school);
       console.log(`Fetching profiles in AlumniCard for ${school} at ${company}...`); // Debugging log
       
-      // Only proceed if we have valid school data
-      if (!school || school === "Unknown" || school === "") {
+      
+        
+      
+      if (!school) {
         setError("Please add your college in your profile to see alumni");
         setLoading(false);
         return;
@@ -47,6 +50,7 @@ export default function AlumniCard({ school, company }: AlumniCardProps) {
     return (
       <div className="p-6 border rounded-xl shadow-lg w-full">
         <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
+        <p className="text-gray-500 mb-4">Loading...</p>
         <div className="animate-pulse space-y-4">
           <div className="h-16 bg-gray-200 rounded"></div>
           <div className="h-16 bg-gray-200 rounded"></div>
@@ -62,11 +66,7 @@ export default function AlumniCard({ school, company }: AlumniCardProps) {
       <div className="p-6 border rounded-xl shadow-lg w-full">
         <h2 className="text-xl font-bold mb-4">Alumni Profiles</h2>
         <div className="text-red-500">{error}</div>
-        {(!school || school === "Unknown") && (
-          <div className="mt-4">
-            <p>To see alumni from your college at this company, please update your profile with your college information.</p>
-          </div>
-        )}
+        
       </div>
     );
   }
