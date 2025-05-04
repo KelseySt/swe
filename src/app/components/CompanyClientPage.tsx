@@ -4,6 +4,9 @@ import CompanyCard from "./CompanyCard";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { companies } from "@/app/apiFunctions/companies";
 import { ArrowUpIcon, ArrowDownIcon } from "@heroicons/react/24/solid";
+import { useAuth } from "@/app/useAuth";
+import { db } from "../firebase"; 
+import { doc, getDoc } from "firebase/firestore"; //added import
 import {
   LineChart,
   Line,
@@ -15,7 +18,6 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-// import PostForm from "../PostForm/page";
 import PostForm from "./PostForm";
 import PostHistory from "./CompanyPostHistory";
 import AlumniCard from "./AlumniCard";
@@ -38,6 +40,40 @@ export default function CompanyClientPage({
   metrics: Metric[];
 }) {
   const [index, setIndex] = useState(0);
+  const { user } = useAuth(); // Get the current authenticated user
+  const [userData, setUserData] = useState<any>(null);
+  const [userLoading, setUserLoading] = useState(true);
+
+  // Fetch user data when the user is logged in
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user) {
+        try {
+          console.log("Fetching user data for:", user.uid);
+          const userDocRef = doc(db, "users", user.uid);
+          const userDoc = await getDoc(userDocRef);
+
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            console.log("User data fetched:", data);
+            setUserData(data);
+          } else {
+            console.log("No user data found!");
+            setUserData(null);
+          }
+        } catch (error) {
+          console.error("Error fetching user data:", error);
+          setUserData(null);
+        }
+      } else {
+        console.log("No authenticated user");
+        setUserData(null);
+      }
+      setUserLoading(false);
+    };
+
+    fetchUserData();
+  }, [user]);
 
   const handlePrevious = () => {
     setIndex((prev) => Math.min(prev + 1, metrics.length - 1));
@@ -60,6 +96,9 @@ export default function CompanyClientPage({
 
   const netMarginChange = mostRecentYear.netMargin - firstYear.netMargin;
   const isIncrease = netMarginChange > 0;
+  
+  console.log("User college:", userData?.college);
+  
   const percentageChange = (
     (netMarginChange / firstYear.netMargin) *
     100
@@ -247,15 +286,14 @@ export default function CompanyClientPage({
           <PostForm selectedCompany={company} />
           <PostHistory company={company} />
 
-          {/* UNCOMMENT/COMMENT THIS FOR HARD CODE APPROACH */}
-          {/*<AlumniCard companyAb={companyAbbrev} />*/}
-
-          {/* UNCOMMENT THIS FOR SCRAPE LOGIC APPROACH */}
-
-           <AlumniCard school = "University of Georgia" company = {companyCommonName} /> 
+          {/* Pass the user's college data to AlumniCard */}
+          <AlumniCard 
+            school={userData?.college || "Unknown"} 
+            company={companyCommonName} 
+          />
         </div>
       </div>
-      <div>{/* <UserProfile /> */}</div>
     </div>
   );
 }
+
