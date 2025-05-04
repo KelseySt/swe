@@ -23,8 +23,8 @@ export interface FiscalYearData {
 //var companyBalanceData;
 //var companyIncomeData;
 
-var FiveYearFinancials : FiscalYearData[] = [];
-var FiveYearMetrics : FiscalYearMetrics[] = [];
+let FiveYearFinancials : FiscalYearData[] = [];
+let FiveYearMetrics : FiscalYearMetrics[] = [];
 
 export const fmpBalance = async (company: string) => {
     

@@ -73,11 +73,11 @@ export default async function CompanyPage({params, }: { params: Promise<{ compan
     /* For the sake of saving api calls, do not uncomment 
      these, and use the testData for UI testing instead :) */
 
-    //const companyBalanceData = await fmpBalance(company);
-    //const companyIncomeData = await fmpIncome(company);
-    //var fiveYearFinancials = await getFiveYearFinancials(companyBalanceData, companyIncomeData);
+    const companyBalanceData = await fmpBalance(company);
+    const companyIncomeData = await fmpIncome(company);
+    const fiveYearFinancials = await getFiveYearFinancials(companyBalanceData, companyIncomeData);
 
-    const fiveYearFinancials = testData; 
+    //const fiveYearFinancials = testData; 
     const fiveYearMetrics = await getFiveYearMetrics(fiveYearFinancials);
     
     // This component just lists all of the available data currently, we'll be making big changes
